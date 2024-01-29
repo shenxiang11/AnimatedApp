@@ -118,7 +118,7 @@ struct ContentView: View {
                     .ignoresSafeArea(.all, edges: .top)
                     .offset(y: show ? -10 : 0)
                     .zIndex(1)
-                    .transition(.move(edge: .top))
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
             
         }
