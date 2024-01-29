@@ -12,6 +12,7 @@ struct ContentView: View {
     @AppStorage("selectedTab") private var selectedTab: Tab = .chat
     @State var isOpen = false
     @State var show = false
+    @State var showTabbar = true
     let button = {
         let vm = RiveViewModel(fileName: "menu_button", autoPlay: false)
         vm.setInput("isOpen", value: false)
@@ -93,11 +94,8 @@ struct ContentView: View {
                     }
                 }
             
-            if !isOpen && !show {
+            if showTabbar {
                 TabBar()
-                    .offset(y: isOpen ? 300 : 0)
-                    .offset(y: show ? 200 : 0)
-                    .transition(.move(edge: .bottom))
                     .offset(y: -24)
                     .background {
                         LinearGradient(colors: [.background.opacity(0), .background], startPoint: .top, endPoint: .bottom)
@@ -106,6 +104,8 @@ struct ContentView: View {
                             .allowsHitTesting(false)
                     }
                     .ignoresSafeArea()
+                    .zIndex(1)
+                    .transition(.move(edge: .bottom))
             }
             
             if show {
@@ -115,17 +115,26 @@ struct ContentView: View {
                         RoundedRectangle(cornerRadius: 30, style: .continuous)
                     }
                     .shadow(color: .black.opacity(0.5), radius: 40, x: 0, y: 40)
-                    .ignoresSafeArea(.all)
-                    .transition(.move(edge: .top))
+                    .ignoresSafeArea(.all, edges: .top)
                     .offset(y: show ? -10 : 0)
                     .zIndex(1)
+                    .transition(.move(edge: .top))
             }
+            
         }
         .onChange(of: isOpen) { _, newValue in
+            withAnimation {
+                showTabbar = !newValue
+            }
             button.setInput("isOpen", value: !newValue)
             
             UIApplication.shared.setStatusBarStyle(newValue ? .lightContent : .darkContent, animated: true)
         }
+        .onChange(of: show, { _, newValue in
+            withAnimation {
+                showTabbar = !newValue
+            }
+        })
         .onAppear {
             UITabBar.appearance().isHidden = true
         }

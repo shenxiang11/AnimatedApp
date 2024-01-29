@@ -22,7 +22,9 @@ struct OnboardingView: View {
                 .offset(y: showModal ? -50 : 0)
             
             Button {
-                show = false
+                withAnimation {
+                    show = false
+                }
             } label: {
                 Image(systemName: "xmark")
                     .frame(width: 36, height: 36)
@@ -45,6 +47,7 @@ struct OnboardingView: View {
                     }
                 
                 SiginView(showModal: $showModal)
+                    .zIndex(1)
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .overlay(alignment: .bottom) {
                         Button {
