@@ -15,6 +15,7 @@ struct VCard: View {
             Text(course.title)
                 .customFont(.title2)
                 .frame(maxWidth: 170, alignment: .leading)
+                .layoutPriority(1)
             
             Text(course.subtitle)
                 .customFont(.subheadline)
@@ -27,15 +28,15 @@ struct VCard: View {
             
             HStack {
                 ForEach(Array([4, 5, 6].shuffled().enumerated()), id: \.offset) { index, num in
-                    Image("Avatar \(num)")
+                    Image("Avatar \(Int(num))")
                         .resizable()
                         .frame(width: 44, height: 44)
                         .mask(Circle())
-                        .offset(x: index * -20)
+                        .offset(x: CGFloat(index * -20))
                 }
             }
-
         }
+        .foregroundStyle(.white)
         .padding(30)
         .frame(width: 260, height: 310)
         .background {
@@ -55,5 +56,5 @@ struct VCard: View {
 }
 
 #Preview {
-    VCard(course: courses[0])
+    VCard(course: courses[2])
 }
